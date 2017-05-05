@@ -1,3 +1,5 @@
+import Numbers.BasicInteger
+import ScalaMath.Add
 
 object ScalaMath {
 
@@ -57,10 +59,20 @@ object ScalaMath {
 
   type Reducer = PartialFunction[Expression, Expression]
 
-  def reduce(exp: Expression): Expression = (AlgebraReducers.addReducer orElse AlgebraReducers.multReducer)(exp)
+  def Reducer[T <: Expression](reducer: T => Expression): Reducer = reducer.asInstanceOf[Reducer]
+
+  def reduce(exp: Expression): Expression = (AlgebraReducers.AddReducer orElse AlgebraReducers.MultReducer)(exp)
 
   def evaluate(exp: Expression, variables: Map[Variable, Number]): Expression = {
 
     reduce(exp)
+  }
+}
+
+object Test {
+  def test(): Unit = {
+    print("Start")
+    print(ScalaMath.reduce(Add(BasicInteger(5), BasicInteger(5))))
+    print("end")
   }
 }

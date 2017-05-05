@@ -2,11 +2,11 @@ import ScalaMath._
 
 object AlgebraReducers {
 
-   val addReducer: Reducer = {
+  val AddReducer: Reducer = Reducer[Add] {
      case Add(n1: Number, n2: Number) => n1 + n2
-   }
+  }
 
-  val multReducer: Reducer = {
+  val MultReducer: Reducer = Reducer[Multiply] {
     case Multiply(n1: Number, n2: Number) => n1 * n2
   }
 }
