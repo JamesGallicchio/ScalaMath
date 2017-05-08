@@ -59,20 +59,24 @@ object ScalaMath {
 
   type Reducer = PartialFunction[Expression, Expression]
 
-  def Reducer[T <: Expression](reducer: T => Expression): Reducer = reducer.asInstanceOf[Reducer]
+  def Reducer[T <: Expression](reducer: T => Expression): PartialFunction[Expression, Expression] = {
+    case exp: T => reducer(exp)
+  }
 
-  def reduce(exp: Expression): Expression = (AlgebraReducers.AddReducer orElse AlgebraReducers.MultReducer)(exp)
+  def reduce(exp: Expression): Expression = {
+    def r(e: Expression): Expression = (AlgebraReducers.AddReducer orElse AlgebraReducers.MultReducer)(e)
+
+    var last = exp
+    var current = r(exp)
+    while(current != last) {
+      last = current
+      current = r(current)
+    }
+    current
+  }
 
   def evaluate(exp: Expression, variables: Map[Variable, Number]): Expression = {
 
     reduce(exp)
-  }
-}
-
-object Test {
-  def test(): Unit = {
-    print("Start")
-    print(ScalaMath.reduce(Add(BasicInteger(5), BasicInteger(5))))
-    print("end")
   }
 }
