@@ -7,7 +7,9 @@ object AlgebraReducers {
     case Add(n1: Number, n2: Number) => n1 + n2
     case Add(BasicInteger(0), e) => e
     case Add(e, BasicInteger(0)) => e
-    //case Add(e1, e2) if CommonFactor.of(e1, e2) isInstanceOf[Some] => CommonFactor.of(e1, e2)
+    case Add(e1, e2) if CommonFactor.of(e1, e2).isInstanceOf[Some] => CommonFactor.of(e1, e2).get match {
+      case CommonFactor(f, a, b) => Multiply(f, Add(a, b))
+    }
   }
 
   val MultReducer: Reducer = { case mult: Multiply => (reduce(mult.exp1), reduce(mult.exp2)) match {

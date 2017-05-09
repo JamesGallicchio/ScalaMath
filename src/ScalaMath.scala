@@ -131,7 +131,7 @@ object ScalaMath {
     def r(e: Expression): Expression = (AlgebraReducers.AddReducer
       orElse AlgebraReducers.MultReducer
       orElse AlgebraReducers.RecipReducer
-      orElse PartialFunction[Expression, Expression](o => o))(e)
+      orElse {case o => o})(e)
 
     var last = exp.applyInner(r)
     var current = r(last)
