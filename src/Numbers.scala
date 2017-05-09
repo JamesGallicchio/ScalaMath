@@ -1,4 +1,4 @@
-import ScalaMath.{Negate, Number}
+import ScalaMath.{Expression, Negate, Number}
 
 object Numbers {
 
@@ -28,10 +28,36 @@ object Numbers {
     }
 
     override def ^(n: Number): Number = n match {
-      case other: BasicInteger => BasicInteger(num ^ other.num)
-      case other: BasicDecimal => BasicDecimal(Math.pow(num, other.num))
+      case BasicInteger(o) => BasicInteger(num ^ o)
+      case BasicDecimal(o) => BasicDecimal(Math.pow(num, o))
       case other: PowerTower => PowerTower(num >= 0, Math.abs(num), other)
     }
+
+    override def >(n: Number): Boolean = n match {
+      case BasicInteger(o) => num > o
+      case BasicDecimal(o) => num > o
+      case other => other < this
+    }
+
+    override def <(n: Number): Boolean = n match {
+      case BasicInteger(o) => num < o
+      case BasicDecimal(o) => num < o
+      case other => other > this
+    }
+
+    override def >=(n: Number): Boolean = n match {
+      case BasicInteger(o) => num >= o
+      case BasicDecimal(o) => num >= o
+      case other => other <= this
+    }
+
+    override def <=(n: Number): Boolean = n match {
+      case BasicInteger(o) => num <= o
+      case BasicDecimal(o) => num <= o
+      case other => other >= this
+    }
+
+    override def toString: String = "" + num
   }
 
   case class BasicDecimal(num: Double) extends Number {
@@ -64,6 +90,32 @@ object Numbers {
       case other: BasicDecimal => BasicDecimal(Math.pow(num, other.num))
       case other: PowerTower => PowerTower(num >= 0, Math.abs(num), other)
     }
+
+    override def >(n: Number): Boolean = n match {
+      case BasicInteger(o) => num > o
+      case BasicDecimal(o) => num > o
+      case other => other < this
+    }
+
+    override def <(n: Number): Boolean = n match {
+      case BasicInteger(o) => num < o
+      case BasicDecimal(o) => num < o
+      case other => other > this
+    }
+
+    override def >=(n: Number): Boolean = n match {
+      case BasicInteger(o) => num >= o
+      case BasicDecimal(o) => num >= o
+      case other => other <= this
+    }
+
+    override def <=(n: Number): Boolean = n match {
+      case BasicInteger(o) => num <= o
+      case BasicDecimal(o) => num <= o
+      case other => other >= this
+    }
+
+    override def toString: String = "" + num
   }
 
   case class PowerTower private[PowerTower](sign: Boolean, coef: Double, exp: PowerTower) extends Number {
@@ -77,6 +129,14 @@ object Numbers {
     override def /(n: Number): Number = ???
 
     override def ^(n: Number): Number = ???
+
+    override def >(n: Number): Boolean = ???
+
+    override def <(n: Number): Boolean = ???
+
+    override def >=(n: Number): Boolean = ???
+
+    override def <=(n: Number): Boolean = ???
   }
 
   object PowerTower {
@@ -85,18 +145,6 @@ object Numbers {
     private def fix(p: PowerTower): PowerTower = {
       ???
     }
-  }
-
-  final case object IMAGINARY extends Number {
-    override def +(n: Number): Number = ???
-
-    override def -(n: Number): Number = ???
-
-    override def *(n: Number): Number = ???
-
-    override def /(n: Number): Number = ???
-
-    override def ^(n: Number): Number = ???
   }
 
   final val PI = BasicDecimal(Math.PI)
